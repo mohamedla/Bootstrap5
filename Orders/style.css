@@ -63,12 +63,13 @@ body {
 
 .addOrder {
   margin: 5px;
+  border: 1px solid #00CC66;
+  border-radius: 5px;
 }
 
 .addOrder:hover{
   background-color: #00CC66;
   color: #fefefe;
-  border-radius: 5px;
   padding: 5px;
 }
 
