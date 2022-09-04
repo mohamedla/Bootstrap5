@@ -1,0 +1,108 @@
+table {
+  border: 2px solid black;
+  width: 100%;
+}
+
+.totalPrice,
+.totalclient {
+  border-top: 2px solid black;
+}
+
+.totalPrice {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+tr {
+  border: 2px solid black;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column;
+  min-height: 97vh;
+}
+
+.orders {
+  width: 95%;
+  background-color: #fefefe;
+  padding: 1rem;
+}
+
+body {
+  background-image: url("bg-image.jpg");
+  background-repeat: no-repeat;
+  /* background-position: center; */
+  background-size: cover;
+}
+
+.indexName {
+  background-image: linear-gradient(182deg, #f0f0a0, #f77);
+  color: transparent;
+  -webkit-background-clip: text;
+  font-size: 3rem;
+  font-weight: 900;
+}
+
+.name,
+.add,
+.remove,
+.cancel,
+.totalPrice {
+  text-align: center;
+}
+
+.addOrder,
+.addType {
+  background-color: #fefefe;
+  color: #00CC66;
+
+}
+
+.addOrder {
+  margin: 5px;
+}
+
+.addOrder:hover{
+  background-color: #00CC66;
+  color: #fefefe;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+button {
+  border: none;
+}
+
+svg:hover {
+  width: 2.2rem;
+  height: 2.2rem;
+}
+
+.removeType,
+.cancelOrder {
+  color: #f00;
+  background-color: #fefefe;
+}
+
+svg {
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  margin: 0;
+}
+
+input {
+  width: 40px;
+}
+
+.clientName{
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+}
+#types{
+  display: flex;
+}
