@@ -99,17 +99,20 @@ function addTypeCol() {
     `;
   this.event.currentTarget.parentElement.parentElement.querySelector('#types').appendChild(tag);
   setOptionsObj(tag.querySelector("#typeOptions"), types);
+  CalculateTotals();
 }
 
 function removeTypeCol() {
   var types = this.event.currentTarget.parentElement.parentElement.querySelector('#types');
   types.removeChild(types.lastChild);
+  CalculateTotals();
 }
 
 function cancelOrder() {
   var row = this.event.currentTarget.parentElement.parentElement;
   row.nextElementSibling.remove();
   row.remove();
+  CalculateTotals();
 }
 
 function CalculateTotals() {
