@@ -1,5 +1,5 @@
 // Data
-const clients = [
+let clients = [
   'Ahmed Salama',
   'Islam Ibrahim',
   'Islam Anwer',
@@ -13,7 +13,7 @@ const clients = [
 
 clients.sort();
 
-const types = {
+let types = {
   Bean: 3,
   Ta3mia: 3.5,
   Potatoes: 4,
@@ -21,6 +21,10 @@ const types = {
   Egg: 4,
   Papa: 4
 }
+
+let orders = []
+
+let totalOrderItems = {}
 
 // Functins
 function setOptionsArr(element, content) {
@@ -116,20 +120,90 @@ function cancelOrder() {
 }
 
 function CalculateTotals() {
+  orders = [];
   var collect = document.querySelectorAll('td#types');
   let totalOrder = 0;
   collect.forEach(e => {
     let totalClient = 0;
     const clientOrder = e.querySelectorAll('select.typeOptions');
+    let orderItem = {};
     clientOrder.forEach(t => {
       totalClient += (types[t.value] * t.nextElementSibling.value);
+      orderItem[t.value] = parseInt(t.nextElementSibling.value)
     });
+    orders.push(orderItem);
     totalOrder += totalClient;
-    console.log(totalClient);
     e.parentElement.nextElementSibling.querySelector('span.totalclientVal').innerHTML = totalClient;
   });
-  console.log(totalOrder);
-  document.querySelector('#totalPriceVal').innerHTML = totalOrder
+  document.querySelector('#totalPriceVal').innerHTML = totalOrder;
+  calculateTotalOrderItems();
+}
+
+function calculateTotalOrderItems() {
+  totalOrderItems = {}
+  orders.forEach(order => {
+    for (const key in order) {
+      if (typeof(totalOrderItems[key]) === 'undefined') {
+        // console.log(typeof(order[key]) + order[key]);
+        debugger;
+        if (!isNaN(order[key])) {
+          totalOrderItems[key] = order[key];
+        }
+      }else{
+        if (!isNaN(order[key])) {
+          totalOrderItems[key] += order[key];
+        }
+      }
+    }
+  });
+  let itemsHolder = document.querySelector('#totalOrderItems');
+  let itemsContainer = ``;
+  for (const key in totalOrderItems) {
+    itemsContainer += ` <span class ="orderItem"> ${key} ${totalOrderItems[key]} </span>`;
+  }
+  itemsHolder.innerHTML = itemsContainer;
+}
+
+function displayNameRows() {
+  const rowsWarpper = document.getElementById('nameRows');
+  clients.forEach(client => {
+    var tag = document.createElement('tr');
+    tag.innerHTML  = `
+    <td>
+      <input type="text" name="enName" id="enName" value="${client}">
+    </td>
+    <td>
+      <input type="text" name="enName" id="enName" value="${client}">
+    </td>
+    <td class="remove">
+      <button class="removeType" onclick="">
+        <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
+      </button>
+    </td>`;
+    rowsWarpper.appendChild(tag);
+  });
+}
+function displayTypeRows() {
+  const rowsWarpper = document.getElementById('typeRows');
+  for (const key in types) {
+    var tag = document.createElement('tr');
+    tag.innerHTML  = `
+    <td>
+      <input type="text" name="enName" id="enName" value="${key}">
+    </td>
+    <td>
+      <input type="text" name="enName" id="enName" value="${key}">
+    </td>
+    <td>
+      <input type="number" name="enName" id="enName" value="${types[key]}">
+    </td>
+    <td class="remove">
+      <button class="removeType" onclick="">
+        <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
+      </button>
+    </td>`;
+    rowsWarpper.appendChild(tag);
+  }
 }
 
 // Events
@@ -138,6 +212,8 @@ const typeOptions = document.getElementById('typeOptions');
 window.onload = function WindowLoad(event) {
   setOptionsArr(names, clients);
   setOptionsObj(typeOptions, types);
+  displayNameRows();
+  displayTypeRows();
   var addOrderBtn = document.getElementById('addOrder');
 }
 

@@ -11,6 +11,50 @@
   
   <div class="wrapper">
     
+    <div class="float">
+      <div class="pages">
+        <span>Names</span>
+        <span>Types</span>
+      </div>
+      <div class="settings">
+        <div class="names">
+          <div class="addOrderwarpper">
+            <button class="addOrder" id="addName" onclick="" type="button">Add New Name</button>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>En Name</th>
+                <th>Ar Name</th>
+                <th>Remove</th>
+              </tr>
+            </thead>
+            <tbody id="nameRows">
+              
+            </tbody>
+          </table>
+        </div>
+        <div class="types">
+          <div class="addOrderwarpper">
+            <button class="addOrder" id="addName" onclick="" type="button">Add New Name</button>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>En Name</th>
+                <th>Ar Name</th>
+                <th>Price</th>
+                <th>Remove</th>
+              </tr>
+            </thead>
+            <tbody id="typeRows">
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
     <div class="mainBar">
       <span class="indexName">
         Our Orders
@@ -77,10 +121,17 @@
           
         </tbody>
         <tfoot>
-          <td colspan="5" class="totalPrice">
-            <span>Total Order : </span>
-            <span id="totalPriceVal">00</span> EP
-          </td>
+          <tr>
+            <td colspan="5" id="totalOrderItems">
+              
+            </td>
+          </tr>
+          <tr>
+            <td colspan="5" class="totalPrice">
+              <span>Total Order : </span>
+              <span id="totalPriceVal">00</span> EP
+            </td>
+          </tr>
         </tfoot>
       </table>
     </div>
