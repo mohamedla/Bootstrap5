@@ -7,19 +7,22 @@ let clients = [
   'Mohamed Abdallah',
   'Sameh',
   'Ahmed Adel',
-  'Rafat',
+  'Raafat',
   'Abdelrhman'
 ]
 
 clients.sort();
 
 let types = {
-  Bean: 3,
+  Foool: 3,
   Ta3mia: 3.5,
   Potatoes: 4,
   Chease: 4,
   Egg: 4,
-  Papa: 4
+  Papa: 4,
+  FoolWTa3mia: 3.5,
+  FoolWEgg: 4,
+  Ta3miaWEgg: 4
 }
 
 let orders = []
@@ -103,7 +106,6 @@ function addTypeCol() {
     `;
   this.event.currentTarget.parentElement.parentElement.querySelector('#types').appendChild(tag);
   setOptionsObj(tag.querySelector("#typeOptions"), types);
-  CalculateTotals();
 }
 
 function removeTypeCol() {
