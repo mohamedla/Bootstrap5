@@ -15,15 +15,20 @@
       <div class="pages">
         <span>Names</span>
         <span>Types</span>
+        <button id="closeFloat">
+          <svg  class="close" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        </button>
       </div>
       <div class="settings">
         <div class="names">
           <div class="addOrderwarpper">
             <button class="addOrder" id="addName" onclick="" type="button">Add New Name</button>
+            <button class="sumbitNames" id="sumbitNames" onclick="" type="button">Submit</button>
           </div>
           <table>
             <thead>
               <tr>
+                <th>#</th>
                 <th>En Name</th>
                 <th>Ar Name</th>
                 <th>Remove</th>
@@ -62,78 +67,6 @@
     </div>
   
     <div class="orders">
-      <div class="addOrderwarpper">
-        <button class="addOrder" id="addOrder" onclick="addOrderRow();" type="button">Add New Order</button>
-      </div>
-      <table>
-        <thead>
-
-          <tr>
-            <th style="max-width: 20%;width: 15%;">Name</th>
-            <th>Orders</th>
-            <th>Add</th>
-            <th>Remove</th>
-            <th>Cancel</th>
-          </tr>
-
-        </thead>
-        <tbody id="rows">
-
-          <tr>
-
-            <td rowspan="2" class="name">
-              <select class="clientName" name="clientName" id="clientName">
-              </select>
-            </td>
-
-            <td id="types">
-              <select class="typeOptions" name="typeOptions" id="typeOptions">
-              </select>
-              <input type="number" onchange="this.style.width = (((this.value.length + 1) * 8) + 25) + 'px';CalculateTotals();" name="count" id="count" min="0">
-            </td>
-
-            <td rowspan="2" class="add">
-              <button class="addType" onclick="addTypeCol();">
-                <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"></path></svg>
-              </button>
-            </td>
-
-            <td rowspan="2" class="remove">
-              <button class="removeType" onclick="removeTypeCol()">
-                <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
-              </button>
-            </td>
-
-            <td rowspan="2" class="cancel">
-              <button class="cancelOrder" onclick="cancelOrder()">
-                <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
-              </button>
-            </td>
-
-          </tr>
-          <tr>
-            <td class="totalclient">
-              <span>Client Total : </span>
-              <span class="totalclientVal">00</span> EP
-            </td>
-          </tr>
-
-          
-        </tbody>
-        <tfoot>
-          <tr>
-            <td colspan="5" id="totalOrderItems">
-              
-            </td>
-          </tr>
-          <tr>
-            <td colspan="5" class="totalPrice">
-              <span>Total Order : </span>
-              <span id="totalPriceVal">00</span> EP
-            </td>
-          </tr>
-        </tfoot>
-      </table>
     </div>
 
   </div>
