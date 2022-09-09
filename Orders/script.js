@@ -1,5 +1,5 @@
 // Data
-const content = [
+let content = [
   ['Add New Order', 'أضف طلب جديد'],
   ['Name', 'الاسم'],
   ['Order', 'الطلب'],
@@ -26,8 +26,6 @@ let clients = [
 
 let totalOrder = 0;
 let cheque = 0;
-
-// clients.sort();
 
 let types = [
   ['Foool', 'فول', 3],
@@ -210,8 +208,8 @@ function calculateTotalOrderItems() {
 }
 
 function displayNameRows(array) {
-  debugger;
   const rowsWarpper = document.getElementById('nameRows');
+  rowsWarpper.innerHTML = '';
   array.forEach((client, index) => {
     var tag = document.createElement('tr');
     tag.innerHTML = `
@@ -259,7 +257,7 @@ function displayTypeRows(array) {
 function removeSettingRow(array, rows, dis) {
   const row = this.event.currentTarget.parentElement.parentElement;
   if (row.firstElementChild.innerText != '*') {
-    thisArray = array;
+    let thisArray = array;
     thisArray.splice(parseInt(row.firstElementChild.innerText) - 1, 1);
     document.getElementById(rows).innerHTML = '';
     if (dis == 'N') {
@@ -291,7 +289,25 @@ function addSettingRow(dis) {
       </button>
     </td>`;
   } else if (dis == 'T') {
-    displayTypeRows();
+    debugger;
+    rowsWarpper = document.getElementById('typeRows');
+    var tag = document.createElement('tr');
+    tag.innerHTML =  `
+    <td>*</td>
+    <td>
+      <input type="text" name="enName" id="enName">
+    </td>
+    <td>
+      <input type="text" name="enName" id="enName">
+    </td>
+    <td>
+      <input type="number" name="enName" id="enName">
+    </td>
+    <td class="remove">
+      <button class="removeType" onclick="removeSettingRow(types, 'typeRows', 'T')">
+        <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
+      </button>
+    </td>`;
   }
   rowsWarpper.appendChild(tag);
 
@@ -369,6 +385,8 @@ function changeLang() {
 
   const orders = document.querySelector('.orders');
   changeDirection(orders);
+  changeDirection(document.querySelector('.types table'));
+  changeDirection(document.querySelector('.names table'));
 
   const clientSelectors = document.querySelectorAll('.clientName');
   clientSelectors.forEach(clientSelector => {
@@ -413,25 +431,64 @@ function paied() {
     currentTarget.parentElement.style.textDecoration = 'none';
     cheque += parseFloat(val.innerHTML);
   }
-  console.log(cheque);
 }
 
 function submitSettings(dis) {
-  const rows = document.querySelectorAll('.settings #nameRows th');
-  clients = [];
-  let client = [];
-  rows.forEach(row => {
-    client = [];
-    row.querySelectorAll('td input').forEach(val => {
-      client.push(val.value);
+  if (dis == 'N') {
+    const rows = document.querySelectorAll('.settings #nameRows tr');
+    clients = [];
+    let client = [];
+    rows.forEach(row => {
+      client = [];
+      row.querySelectorAll('td input').forEach(val => {
+        client.push(val.value);
+      });
+      clients.push(client);
     });
-    clients.push(client);
-  });
+    const clientSelectors = document.querySelectorAll('.clientName');
+    clientSelectors.forEach(clientSelector => {
+      const val = clientSelector.value;
+      clientSelector.innerHTML = '';
+      setOptionsArr(clientSelector, clients);
+      clientSelector.value = val;
+    });
+  } else if (dis == 'T') {
+      const rows = document.querySelectorAll('.settings #typeRows tr');
+      types = [];
+      let type = [];
+      rows.forEach(row => {
+        type = [];
+        row.querySelectorAll('td input').forEach(val => {
+          type.push(val.value);
+        });
+        types.push(type);
+      });
+      const typeSelectors = document.querySelectorAll('.typeOptions');
+      typeSelectors.forEach(typeSelector => {
+        const val = typeSelector.value;
+        typeSelector.innerHTML = '';
+        setOptionsArr(typeSelector, types);
+        typeSelector.value = val;
+      });
+  }
+alert('Setting Saved');
 }
 
 
 // Events
 window.onload = function WindowLoad(event) {
+  let myData = window.localStorage.appData;
+  if (typeof(myData) != 'undefined') {
+    content = myData.content;
+    clients = myData.clients;
+    totalOrder = myData.totalOrder;
+    cheque = myData.cheque;
+    types = myData.types;
+    orders = myData.orders;
+    totalOrderItems =  myData.totalOrderItems;
+    lang =  myData.lang;
+  }
+
   createOrderTable();
 
   addOrderRow();
