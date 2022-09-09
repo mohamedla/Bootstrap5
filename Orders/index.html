@@ -1,77 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Orders</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  
-  <div class="wrapper">
-    
-    <div class="float">
-      <div class="pages">
-        <span>Names</span>
-        <span>Types</span>
-        <button id="closeFloat">
-          <svg  class="close" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-        </button>
-      </div>
-      <div class="settings">
-        <div class="names">
-          <div class="addOrderwarpper">
-            <button class="addOrder" id="addName" onclick="" type="button">Add New Name</button>
-            <button class="sumbitNames" id="sumbitNames" onclick="" type="button">Submit</button>
-          </div>
-          <table>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>En Name</th>
-                <th>Ar Name</th>
-                <th>Remove</th>
-              </tr>
-            </thead>
-            <tbody id="nameRows">
-              
-            </tbody>
-          </table>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Orders</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="float">
+        <div class="pages">
+          <button class="pagesBtn active" id="namePage">Names</button>
+          <button class="pagesBtn" id="typePage">Types</button>
+          <button id="closeFloat">
+            <svg
+              class="close"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
+            </svg>
+          </button>
         </div>
-        <div class="types">
-          <div class="addOrderwarpper">
-            <button class="addOrder" id="addName" onclick="" type="button">Add New Name</button>
+        <div class="settings">
+          <div class="names">
+            <div class="addOrderwarpper">
+              <button
+                class="addOrder"
+                id="addName"
+                onclick="addSettingRow('N')"
+                type="button"
+              >
+                Add New Name
+              </button>
+              <button
+                class="sumbitNames"
+                id="sumbitNames"
+                onclick=" submitSettings(1)"
+                type="button"
+              >
+                Submit
+              </button>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>En Name</th>
+                  <th>Ar Name</th>
+                  <th>Remove</th>
+                </tr>
+              </thead>
+              <tbody id="nameRows"></tbody>
+            </table>
           </div>
-          <table>
-            <thead>
-              <tr>
-                <th>En Name</th>
-                <th>Ar Name</th>
-                <th>Price</th>
-                <th>Remove</th>
-              </tr>
-            </thead>
-            <tbody id="typeRows">
-              
-            </tbody>
-          </table>
+          <div class="types">
+            <div class="addOrderwarpper">
+              <button class="addOrder" id="addName" onclick="" type="button">
+                Add New Name
+              </button>
+              <button
+                class="sumbitNames"
+                id="sumbittypes"
+                onclick=""
+                type="button"
+              >
+                Submit
+              </button>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>En Name</th>
+                  <th>Ar Name</th>
+                  <th>Price</th>
+                  <th>Remove</th>
+                </tr>
+              </thead>
+              <tbody id="typeRows"></tbody>
+            </table>
+          </div>
         </div>
       </div>
+
+      <div class="mainBar">
+        <span class="indexName"> Our Orders </span>
+      </div>
+
+      <div class="orders"></div>
     </div>
 
-    <div class="mainBar">
-      <span class="indexName">
-        Our Orders
-      </span>
-    </div>
-  
-    <div class="orders">
-    </div>
-
-  </div>
-
-  <script src="script.js"></script>
-
-</body>
+    <script src="script.js"></script>
+  </body>
 </html>

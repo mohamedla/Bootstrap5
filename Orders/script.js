@@ -9,33 +9,36 @@ const content = [
   ['Total Order', 'الطلب الكلى'],
   ['EP', 'ج'],
   ['ع', 'E'],
-  ['Client Total','اجمالى العميل'],
+  ['Client Total', 'اجمالى العميل'],
 ]
 
 let clients = [
   ['Ahmed Salama', 'احمد سلامة'],
   ['Islam Ibrahim', 'اسلام ابراهيم'],
-  ['Islam Anwer','اسلام أنور'],
+  ['Islam Anwer', 'اسلام أنور'],
   ['Mohamed Ashraf', 'محمد أشرف'],
-  ['Mohamed Abdallah','محمد عبد الله'],
+  ['Mohamed Abdallah', 'محمد عبد الله'],
   ['Sameh', 'سامح'],
-  ['Ahmed Adel','أحمد عادل'],
+  ['Ahmed Adel', 'أحمد عادل'],
   ['Raafat', 'رأفت'],
-  ['Abdelrhman','عبدالرحمن']
+  ['Abdelrhman', 'عبدالرحمن']
 ]
+
+let totalOrder = 0;
+let cheque = 0;
 
 // clients.sort();
 
 let types = [
-  ['Foool','فول',3],
-  ['Ta3mia','طعمية',3.5],
-  ['Potatoes','بطاطس',4],
-  ['Chease','جبنة',4],
-  ['Egg','بيض',4],
-  ['Papa','بابا',4],
-  ['FoolWTa3mia','فول بالطعمية',3.5],
-  ['FoolWEgg','فول بالبيض',4],
-  ['Ta3miaWEgg','طعمية بالبيض',4]
+  ['Foool', 'فول', 3],
+  ['Ta3mia', 'طعمية', 3.5],
+  ['Potatoes', 'بطاطس', 4],
+  ['Chease', 'جبنة', 4],
+  ['Egg', 'بيض', 4],
+  ['Papa', 'بابا', 4],
+  ['FoolWTa3mia', 'فول بالطعمية', 3.5],
+  ['FoolWEgg', 'فول بالبيض', 4],
+  ['Ta3miaWEgg', 'طعمية بالبيض', 4]
 ]
 
 let orders = []
@@ -110,9 +113,9 @@ function addOrderRow() {
   secondTag.innerHTML = `
   <tr>
     <td class="totalclient">
-    <input onchange="paied();" type="checkbox" name="paied"><span>${content[9][i]}: </span>
+    <input onchange="paied()" type="checkbox" name="paied"><span>${content[9][i]}: </span>
       <span class="totalclientVal">0</span> 
-      <span class="totalclientVal">${content[7][i]}</span>
+      <span>${content[7][i]}</span>
     </td>
   </tr>
   `;
@@ -151,20 +154,29 @@ function cancelOrder() {
 function CalculateTotals() {
   orders = [];
   var collect = document.querySelectorAll('td#types');
-  let totalOrder = 0;
+  totalOrder = 0;
   collect.forEach(e => {
     let totalClient = 0;
     const clientOrder = e.querySelectorAll('select.typeOptions');
     let orderItem = {};
     clientOrder.forEach(t => {
-      totalClient += (types[t.value-1][2] * t.nextElementSibling.value);
+      totalClient += (types[t.value - 1][2] * t.nextElementSibling.value);
       orderItem[t.value] = parseInt(t.nextElementSibling.value)
     });
     orders.push(orderItem);
     totalOrder += totalClient;
-    e.parentElement.nextElementSibling.querySelector('span.totalclientVal').innerHTML = totalClient;
+    if (totalClient > 0) {
+      e.parentElement.nextElementSibling.querySelector('span.totalclientVal').innerHTML = `
+        ${totalClient} + 1 = <span class='totToPay'>${totalClient + 1}</span>
+      `;
+    } else {
+      e.parentElement.nextElementSibling.querySelector('span.totalclientVal').innerHTML = totalClient;
+    }
   });
-  document.querySelector('#totalPriceVal').innerHTML = totalOrder;
+  cheque = totalOrder + orders.length;
+  if (totalOrder > 0) {
+    document.querySelector('#totalPriceVal').innerHTML = totalOrder + ' + ' + (orders.length) + ' = ' + cheque;
+  }
   calculateTotalOrderItems(orders);
 }
 
@@ -178,13 +190,13 @@ function calculateTotalOrderItems() {
   }
   orders.forEach(order => {
     for (const key in order) {
-      if (typeof(totalOrderItems[types[key-1][i]]) === 'undefined') {
+      if (typeof (totalOrderItems[types[key - 1][i]]) === 'undefined') {
         if (!isNaN(order[key])) {
-          totalOrderItems[types[key-1][i]] = order[key];
+          totalOrderItems[types[key - 1][i]] = order[key];
         }
-      }else{
+      } else {
         if (!isNaN(order[key])) {
-          totalOrderItems[types[key-1][i]] += order[key];
+          totalOrderItems[types[key - 1][i]] += order[key];
         }
       }
     }
@@ -197,12 +209,13 @@ function calculateTotalOrderItems() {
   itemsHolder.innerHTML = itemsContainer;
 }
 
-function displayNameRows() {
+function displayNameRows(array) {
+  debugger;
   const rowsWarpper = document.getElementById('nameRows');
-  clients.forEach((client, index) => {
+  array.forEach((client, index) => {
     var tag = document.createElement('tr');
-    tag.innerHTML  = `
-    <td>${index+1}</td>
+    tag.innerHTML = `
+    <td>${index + 1}</td>
     <td>
       <input type="text" name="enName" id="enName" value="${client[0]}">
     </td>
@@ -210,7 +223,7 @@ function displayNameRows() {
       <input type="text" name="enName" id="enName" value="${client[1]}">
     </td>
     <td class="remove">
-      <button class="removeType" onclick="removeNameRow()">
+      <button class="removeType" onclick="removeSettingRow(clients, 'nameRows', 'N')">
         <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
       </button>
     </td>`;
@@ -218,12 +231,13 @@ function displayNameRows() {
   });
 }
 
-function displayTypeRows() {
+function displayTypeRows(array) {
   const rowsWarpper = document.getElementById('typeRows');
-  types.forEach(type => {
-    
+  array.forEach((type, index) => {
+
     var tag = document.createElement('tr');
-    tag.innerHTML  = `
+    tag.innerHTML = `
+    <td>${index + 1}</td>
     <td>
       <input type="text" name="enName" id="enName" value="${type[0]}">
     </td>
@@ -234,7 +248,7 @@ function displayTypeRows() {
       <input type="number" name="enName" id="enName" value="${type[2]}">
     </td>
     <td class="remove">
-      <button class="removeType" onclick="">
+      <button class="removeType" onclick="removeSettingRow(types, 'typeRows', 'T')">
         <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
       </button>
     </td>`;
@@ -242,11 +256,45 @@ function displayTypeRows() {
   });
 }
 
-function removeNameRow() {
+function removeSettingRow(array, rows, dis) {
   const row = this.event.currentTarget.parentElement.parentElement;
-  clients.splice(parseInt(row.firstElementChild.innerText)-1, 1);
-  document.getElementById('nameRows').innerHTML = '';
-  displayNameRows();
+  if (row.firstElementChild.innerText != '*') {
+    thisArray = array;
+    thisArray.splice(parseInt(row.firstElementChild.innerText) - 1, 1);
+    document.getElementById(rows).innerHTML = '';
+    if (dis == 'N') {
+      displayNameRows(thisArray);
+    } else if (dis == 'T') {
+      displayTypeRows(thisArray);
+    }
+  } else {
+    row.remove();
+  }
+}
+
+function addSettingRow(dis) {
+  let rowsWarpper;
+  if (dis == 'N') {
+    rowsWarpper = document.getElementById('nameRows');
+    var tag = document.createElement('tr');
+    tag.innerHTML = `
+    <td>*</td>
+    <td>
+      <input type="text" name="enName" id="enName">
+    </td>
+    <td>
+      <input type="text" name="enName" id="enName">
+    </td>
+    <td class="remove">
+      <button class="removeType" onclick="removeSettingRow(clients, 'nameRows', 'N')">
+        <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
+      </button>
+    </td>`;
+  } else if (dis == 'T') {
+    displayTypeRows();
+  }
+  rowsWarpper.appendChild(tag);
+
 }
 
 function createOrderTable() {
@@ -296,12 +344,12 @@ function createOrderTable() {
 </table>
   `
   changeDirection(orders);
-  
+
 }
 function changeDirection(element) {
   if (lang == 'ar') {
     element.style.direction = 'rtl';
-  }else{
+  } else {
     element.style.direction = 'ltr';
   }
 }
@@ -309,7 +357,7 @@ function changeDirection(element) {
 function changeLang() {
   if (lang == 'ar') {
     lang = 'en';
-  }else{
+  } else {
     lang = 'ar';
   }
 
@@ -341,10 +389,11 @@ function changeLang() {
   orders.querySelector('#addOrder').innerHTML = content[0][i];
   orders.querySelector('#changeLang').innerHTML = content[8][i];
   orders.querySelectorAll('th').forEach((element, index) => {
-    element.innerHTML = content[index+1][i];
+    element.innerHTML = content[index + 1][i];
   });
   orders.querySelectorAll('.totalclient').forEach((element) => {
-    element.firstElementChild.innerHTML = content[9][i] + ' : ';
+    debugger;
+    element.querySelector('input + span').innerHTML = content[9][i] + ' : ';
     element.lastElementChild.innerHTML = content[7][i];
   });
   orders.querySelector('.totalPrice').firstElementChild.innerHTML = content[6][i] + ' : ';
@@ -353,26 +402,74 @@ function changeLang() {
   CalculateTotals();
 }
 
+function paied() {
+  const currentTarget = this.event.currentTarget;
+  const val = currentTarget.parentElement.querySelector('.totToPay');
+  if (currentTarget.checked && val !== null) {
+    currentTarget.parentElement.style.textDecoration = 'line-through';
+    cheque -= parseFloat(val.innerHTML);
+    totalOrder
+  } else if (val !== null) {
+    currentTarget.parentElement.style.textDecoration = 'none';
+    cheque += parseFloat(val.innerHTML);
+  }
+  console.log(cheque);
+}
 
+function submitSettings(dis) {
+  const rows = document.querySelectorAll('.settings #nameRows th');
+  clients = [];
+  let client = [];
+  rows.forEach(row => {
+    client = [];
+    row.querySelectorAll('td input').forEach(val => {
+      client.push(val.value);
+    });
+    clients.push(client);
+  });
+}
 
 
 // Events
 window.onload = function WindowLoad(event) {
   createOrderTable();
-  displayNameRows();
-  displayTypeRows();
+
   addOrderRow();
+  var float = document.querySelector('.float');
+
+  const opener = document.getElementById('openFloat');
+  opener.addEventListener('click', () => {
+    float.style.display = 'grid';
+    displayNameRows(clients);
+    displayTypeRows(types);
+  });
+
+  const closer = document.getElementById('closeFloat');
+  closer.addEventListener('click', () => {
+    float.style.display = 'none';
+  });
+
+  let pageActive = 0;
+  const pagesBtns = document.querySelectorAll('.pages .pagesBtn');
+  pagesBtns.forEach((pagesBtn, index) => {
+    pagesBtn.addEventListener('click', () => {
+      pagesBtns[pageActive].classList.remove("active");
+      pagesBtn.classList.add("active");
+      pageActive = index;
+    });
+  });
+  const typePage = document.querySelector('.pages #typePage');
+  typePage.addEventListener('click', () => {
+    document.querySelector('.settings .names').style.display = 'none';
+    document.querySelector('.settings .types').style.display = 'flex';
+  });
+  const namePage = document.querySelector('.pages #namePage');
+  namePage.addEventListener('click', () => {
+    document.querySelector('.settings .names').style.display = 'flex';
+    document.querySelector('.settings .types').style.display = 'none';
+  });
 }
 
-var float = document.querySelector('.float');
 
-// const closer = document.getElementById('closeFloat');
-// closer.addEventListener('click', () => {
-//   float.style.display  = 'none';
-// });
 
-// const opener = document.getElementById('openFloat');
-// opener.addEventListener('click',() => {
-//   float.style.display  = 'grid';
-// });
 
