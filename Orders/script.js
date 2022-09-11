@@ -135,6 +135,17 @@ function addTypeCol() {
   this.event.currentTarget.parentElement.parentElement.querySelector('#types').appendChild(tag);
   setOptionsArr(tag.querySelector("#typeOptions"), types);
 }
+function addTypeCol2(element) {
+  var tag = document.createElement('div');
+  tag.className = 'typesWarp';
+  tag.innerHTML = `
+      <select onchange="CalculateTotals();" class="typeOptions" name="typeOptions" id="typeOptions">
+      </select>
+      <input type="number" step="1" onchange="this.value = Math.round(this.value);this.style.width = (((this.value.length + 1) * 8) + 25) + 'px';CalculateTotals();" name="count" id="count" min="0">
+    `;
+  element.appendChild(tag);
+  setOptionsArr(tag.querySelector("#typeOptions"), types);
+}
 
 function removeTypeCol() {
   var types = this.event.currentTarget.parentElement.parentElement.querySelector('#types');
@@ -156,10 +167,11 @@ function CalculateTotals() {
   collect.forEach(e => {
     let totalClient = 0;
     const clientOrder = e.querySelectorAll('select.typeOptions');
-    let orderItem = {};
+    let orderItem = [];
+    orderItem.push(parseInt(clientOrder[0].parentElement.parentElement.parentElement.querySelector('#clientName').value));
     clientOrder.forEach(t => {
       totalClient += (types[t.value - 1][2] * t.nextElementSibling.value);
-      orderItem[t.value] = parseInt(t.nextElementSibling.value)
+      orderItem.push([t.value, parseInt(t.nextElementSibling.value)]);
     });
     orders.push(orderItem);
     totalOrder += totalClient;
@@ -175,7 +187,7 @@ function CalculateTotals() {
   if (totalOrder > 0) {
     document.querySelector('#totalPriceVal').innerHTML = totalOrder + ' + ' + (orders.length) + ' = ' + cheque;
   }
-  calculateTotalOrderItems(orders);
+  calculateTotalOrderItems();
 }
 
 function calculateTotalOrderItems() {
@@ -187,17 +199,19 @@ function calculateTotalOrderItems() {
     i = 1;
   }
   orders.forEach(order => {
-    for (const key in order) {
-      if (typeof (totalOrderItems[types[key - 1][i]]) === 'undefined') {
-        if (!isNaN(order[key])) {
-          totalOrderItems[types[key - 1][i]] = order[key];
-        }
-      } else {
-        if (!isNaN(order[key])) {
-          totalOrderItems[types[key - 1][i]] += order[key];
+    order.forEach(ele => {
+      if (typeof(ele) == 'object') {
+        if (typeof (totalOrderItems[types[ele[0] - 1][i]]) === 'undefined') {
+          if (!isNaN(ele[1])) {
+            totalOrderItems[types[ele[0] - 1][i]] = ele[1];
+          }
+        } else {
+          if (!isNaN(ele[1])) {
+            totalOrderItems[types[ele[0] - 1][i]] += ele[1];
+          }
         }
       }
-    }
+    });
   });
   let itemsHolder = document.querySelector('#totalOrderItems');
   let itemsContainer = ``;
@@ -474,11 +488,69 @@ function submitSettings(dis) {
 alert('Setting Saved');
 }
 
+function displayStored() {
+  const mydata = JSON.parse(window.localStorage.getItem('appData'));
+  // diplay total item
+  // const totalOrderItems = mydata.totalOrderItems;
+  // let itemsHolder = document.querySelector('#totalOrderItems');
+  // let itemsContainer = ``;
+  // for (const key in totalOrderItems) {
+  //   itemsContainer += ` <span class ="orderItem"> ${key} ${totalOrderItems[key]} </span>`;
+  // }
+  // itemsHolder.innerHTML = itemsContainer;
+  // diplay total cost
+  // if (totalOrder > 0) {
+  //   document.querySelector('#totalPriceVal').innerHTML = totalOrder + ' + ' + (orders.length) + ' = ' + cheque;
+  // }
+  // display orders
+  addStoredOrderRow(orders);
+  CalculateTotals();
+}
+
+function addStoredOrderRow(orders) {
+  const rowsWarpper = document.getElementById('rows');
+  let i;
+  if (lang == 'en') {
+    i = 0;
+  } else {
+    i = 1;
+  }
+  orders.forEach(order => {
+    addOrderRow();
+    let thisRow = document.querySelector('#rows').lastElementChild.previousElementSibling;
+    thisRow.querySelector('#clientName').value = order[0];
+    let types = thisRow.querySelector('#types');
+    order.forEach((ele, index) => {
+      if (index > 0) {
+        if (index > 1) {
+          addTypeCol2(types);
+        }
+        types.lastElementChild.firstElementChild.value = ele[0];
+        types.lastElementChild.lastElementChild.value = ele[1];
+      }
+    });
+  });
+  
+}
 
 // Events
+window.onunload = () =>{
+  let myData = {}
+    myData.content = content;
+    myData.clients = clients;
+    myData.totalOrder = totalOrder;
+    myData.cheque = cheque;
+    myData.types = types;
+    myData.orders = orders;
+    myData.totalOrderItems = totalOrderItems;
+    myData.lang = lang;
+    window.localStorage.setItem('appData', JSON.stringify(myData));
+    JSON.parse(window.localStorage.getItem('appData'));
+}
+
 window.onload = function WindowLoad(event) {
-  let myData = window.localStorage.appData;
-  if (typeof(myData) != 'undefined') {
+  let myData = JSON.parse(window.localStorage.getItem('appData'));
+  if (myData != null) {
     content = myData.content;
     clients = myData.clients;
     totalOrder = myData.totalOrder;
@@ -487,11 +559,13 @@ window.onload = function WindowLoad(event) {
     orders = myData.orders;
     totalOrderItems =  myData.totalOrderItems;
     lang =  myData.lang;
+    createOrderTable();
+    displayStored();
+  }else{
+    createOrderTable();
+    addOrderRow();
   }
 
-  createOrderTable();
-
-  addOrderRow();
   var float = document.querySelector('.float');
 
   const opener = document.getElementById('openFloat');
