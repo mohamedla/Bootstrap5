@@ -51,7 +51,7 @@ let orders = []
 
 let totalOrderItems = {}
 
-let lang = 'ar';
+let lang = 'en';
 // Functins
 function setOptionsArr(element, content) {
   for (let i = 0; i < content.length; i++) {
