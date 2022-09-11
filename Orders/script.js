@@ -10,6 +10,14 @@ let content = [
   ['EP', 'ج'],
   ['ع', 'E'],
   ['Client Total', 'اجمالى العميل'],
+  ['En Name', 'الاسم بالانجليزية'],
+  ['Ar Name', 'الاسم بالعربية'],
+  ['Price', 'السعر'],
+  ['Add New Type', 'اضافة صنف جديد'],
+  ['Add New Name', 'اضافة اسم جديد'],
+  ['Submit', 'إرسال'],
+  ['Names', 'الأسماء'],
+  ['Types', 'الأصناف']
 ]
 
 let clients = [
@@ -58,14 +66,14 @@ function setOptionsArr(element, content) {
   }
 }
 
-function setOptionsObj(element, content) {
-  for (const key in content) {
-    var tag = document.createElement('option');
-    tag.value = key;
-    tag.innerHTML = key;
-    element.appendChild(tag);
-  }
-}
+// function setOptionsObj(element, content) {
+//   for (const key in content) {
+//     var tag = document.createElement('option');
+//     tag.value = key;
+//     tag.innerHTML = key;
+//     element.appendChild(tag);
+//   }
+// }
 
 function addOrderRow() {
   var fristTag = document.createElement('tr');
@@ -303,7 +311,6 @@ function addSettingRow(dis) {
       </button>
     </td>`;
   } else if (dis == 'T') {
-    debugger;
     rowsWarpper = document.getElementById('typeRows');
     var tag = document.createElement('tr');
     tag.innerHTML =  `
@@ -399,9 +406,8 @@ function changeLang() {
 
   const orders = document.querySelector('.orders');
   changeDirection(orders);
-  changeDirection(document.querySelector('.types table'));
-  changeDirection(document.querySelector('.names table'));
-
+  createSettingsPart();
+  
   const clientSelectors = document.querySelectorAll('.clientName');
   clientSelectors.forEach(clientSelector => {
     const val = clientSelector.value;
@@ -424,7 +430,6 @@ function changeLang() {
     element.innerHTML = content[index + 1][i];
   });
   orders.querySelectorAll('.totalclient').forEach((element) => {
-    debugger;
     element.querySelector('input + span').innerHTML = content[9][i] + ' : ';
     element.lastElementChild.innerHTML = content[7][i];
   });
@@ -533,6 +538,123 @@ function addStoredOrderRow(orders) {
   
 }
 
+function createSettingsPart() {
+  const float = document.querySelector('.float');
+  float.innerHTML = ``;
+  let i;
+  if (lang == 'en') {
+    i = 0;
+  } else {
+    i = 1;
+  }
+  float.innerHTML = `
+  <div class="pages">
+  <button class="pagesBtn active" id="namePage">${content[16][i]}</button>
+  <button class="pagesBtn" id="typePage">${content[17][i]}</button>
+  <button id="closeFloat">
+    <svg
+      class="close"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+      ></path>
+    </svg>
+  </button>
+</div>
+<div class="settings">
+  <div class="names">
+    <div class="addOrderwarpper">
+      <button
+        class="addOrder"
+        id="addName"
+        onclick="addSettingRow('N')"
+        type="button"
+      >
+      ${content[14][i]}
+      </button>
+      <button
+        class="sumbitNames"
+        id="sumbitNames"
+        onclick=" submitSettings('N')"
+        type="button"
+      >
+      ${content[15][i]}
+      </button>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>${content[10][i]}</th>
+          <th>${content[11][i]}</th>
+          <th>${content[4][i]}</th>
+        </tr>
+      </thead>
+      <tbody id="nameRows"></tbody>
+    </table>
+  </div>
+  <div class="types">
+    <div class="addOrderwarpper">
+      <button class="addOrder" id="addType" onclick="addSettingRow('T')" type="button">
+      ${content[13][i]}
+      </button>
+      <button
+        class="sumbitNames"
+        id="sumbittypes"
+        onclick="submitSettings('T')"
+        type="button"
+      >
+      ${content[15][i]}
+      </button>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>${content[10][i]}</th>
+          <th>${content[11][i]}</th>
+          <th>${content[12][i]}</th>
+          <th>${content[4][i]}</th>
+        </tr>
+      </thead>
+      <tbody id="typeRows"></tbody>
+    </table>
+  </div>
+</div>
+  `;
+  changeDirection(float);
+  const closer = document.getElementById('closeFloat');
+  closer.addEventListener('click', () => {
+    float.style.display = 'none';
+  });
+  let pageActive = 0;
+  const pagesBtns = document.querySelectorAll('.pages .pagesBtn');
+  pagesBtns.forEach((pagesBtn, index) => {
+    pagesBtn.addEventListener('click', () => {
+      pagesBtns[pageActive].classList.remove("active");
+      pagesBtn.classList.add("active");
+      pageActive = index;
+    });
+  });
+  const typePage = document.querySelector('.pages #typePage');
+  typePage.addEventListener('click', () => {
+    document.querySelector('.settings .names').style.display = 'none';
+    document.querySelector('.settings .types').style.display = 'flex';
+  });
+  const namePage = document.querySelector('.pages #namePage');
+  namePage.addEventListener('click', () => {
+    document.querySelector('.settings .names').style.display = 'flex';
+    document.querySelector('.settings .types').style.display = 'none';
+  });
+}
+
 // Events
 window.onunload = () =>{
   let myData = {}
@@ -560,9 +682,11 @@ window.onload = function WindowLoad(event) {
     totalOrderItems =  myData.totalOrderItems;
     lang =  myData.lang;
     createOrderTable();
+    createSettingsPart()
     displayStored();
   }else{
     createOrderTable();
+    createSettingsPart()
     addOrderRow();
   }
 
@@ -574,31 +698,8 @@ window.onload = function WindowLoad(event) {
     displayNameRows(clients);
     displayTypeRows(types);
   });
-
-  const closer = document.getElementById('closeFloat');
-  closer.addEventListener('click', () => {
-    float.style.display = 'none';
-  });
-
-  let pageActive = 0;
-  const pagesBtns = document.querySelectorAll('.pages .pagesBtn');
-  pagesBtns.forEach((pagesBtn, index) => {
-    pagesBtn.addEventListener('click', () => {
-      pagesBtns[pageActive].classList.remove("active");
-      pagesBtn.classList.add("active");
-      pageActive = index;
-    });
-  });
-  const typePage = document.querySelector('.pages #typePage');
-  typePage.addEventListener('click', () => {
-    document.querySelector('.settings .names').style.display = 'none';
-    document.querySelector('.settings .types').style.display = 'flex';
-  });
-  const namePage = document.querySelector('.pages #namePage');
-  namePage.addEventListener('click', () => {
-    document.querySelector('.settings .names').style.display = 'flex';
-    document.querySelector('.settings .types').style.display = 'none';
-  });
+  
+  
 }
 
 
