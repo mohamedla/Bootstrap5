@@ -3,13 +3,13 @@ This is a web app the run full on the browser <br>
 I build this for taking the breakfast  order for me and my colleagues on work cuz it always messy whenever we do it<br>
 So i tried to organized it a little and it worked well<br>
 
-## Usage
+### Usage
 To but it Simple here you can collect the orders of you and your fellow colleagues <br>
 <hr>
 - Can add new order row using the "add new order"  button<br>
 - Add new food type using the <strong>'+'</strong> icon button <br>
 - Remove food type using the <strong>'-'</strong> icon button <br>
-- and Cancel an order useng the <strong>'Bin Icon' </strong>button<br>s
+- and Cancel an order useng the <strong>'Bin Icon' </strong>button<br>
 <hr>
 It support both <strong>Arabic</strong> and <strong>English</strong>
 <hr>
@@ -19,7 +19,7 @@ Can change the food types and names through the <strong>Gear Icon</strong><br>
 - Remove row type using the <strong>'-'</strong> icon button <br>
 - <strong>Edit</strong> the existing data and <strong>Save</strong> the changes by hitting the <strong>Submit</strong> button<br><br>
 
-## The Way it Works
+### The Way it Works
 
 
 -After choosing the client and start to add type when you enter the quantity of the type it automatically calculate the what the client order cost and the total orders and total orders cost.<br>
