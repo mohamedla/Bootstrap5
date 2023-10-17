@@ -1,5 +1,12 @@
 //import { INames, IItems, IClientOrder, IOrderItem, StoredData } from "./interfaces";
 
+
+// import * as SQL from 'sql.js';
+// import { initSqlJs } from 'sql.js';
+
+//import initSqlJs = require("sql.js");
+
+
 interface INames{
     Id : number,
     EName : string,
@@ -21,13 +28,20 @@ interface IOrderItem{
 }
 
 enum language {
-    en = 'en',
-    ar = 'ar'
+    en = 1,
+    ar = 2
 }
 
 enum settingType {
     client = 'N',
     item = 'T'
+}
+
+enum dataFor {
+    client = 1,
+    item = 2,
+		content = 3,
+		insert = 4
 }
 
 interface StoredData{
@@ -40,8 +54,6 @@ interface StoredData{
     totalOrderItems : IOrderItem[],
     lang : language
 }
-
-
 
 // System Language
 let content : INames[] = [
@@ -228,12 +240,6 @@ function setOptionsArr(element : HTMLSelectElement, content : INames[]) : void {
 // add new order row for new client
 function addOrderRow() {
     let fristTag : HTMLTableRowElement = document.createElement('tr');
-    let i : number;
-    if (lang == language.en) {
-        i = 0;
-    } else {
-        i = 1;
-    }
     fristTag.innerHTML = `
     <td rowspan="2" class="name">
         <select class="clientName" name="clientName" id="clientName">
@@ -270,9 +276,9 @@ function addOrderRow() {
     secondTag.innerHTML = `
     <tr>
         <td class="totalclient">
-        <input onchange="paied()" type="checkbox" name="paied"><span>${(i) ? content[9].AName : content[9].EName}: </span>
+        <input onchange="paied()" type="checkbox" name="paied"><span>${ lang == language.ar ? content[9].AName : content[9].EName}: </span>
             <span class="totalclientVal">0</span> 
-            <span>${language.ar ? content[7].AName : content[7].EName}</span>
+            <span>${lang == language.ar ? content[7].AName : content[7].EName}</span>
         </td>
     </tr>
     `;
@@ -524,16 +530,10 @@ function changeDirection(element : HTMLElement) {
 // Create new order table
 function createOrderTable() {
     const orders = document.querySelector('.orders') as HTMLDivElement ;
-    let i;
-    if (lang == language.en) {
-        i = 0;
-    } else {
-        i = 1;
-    }
     orders.innerHTML = `
     <div class="addOrderwarpper">
-    <button class="addOrder" id="addOrder" onclick="addOrderRow();" type="button">${language.ar ? content[0].AName : content[0].EName}</button>
-    <button id="changeLang" onclick="changeLang();" type="button">${language.ar ? content[8].AName : content[8].EName}</button>
+    <button class="addOrder" id="addOrder" onclick="addOrderRow();" type="button">${lang == language.ar ? content[0].AName : content[0].EName}</button>
+    <button id="changeLang" onclick="changeLang();" type="button">${lang == language.ar ? content[8].AName : content[8].EName}</button>
     <button id="openFloat">
     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
     </button>
@@ -542,11 +542,11 @@ function createOrderTable() {
     <thead>
 
         <tr>
-        <th style="max-width: 20%;width: 15%;">${language.ar ? content[1].AName : content[1].EName}</th>
-        <th>${language.ar ? content[2].AName : content[2].EName}</th>
-        <th>${language.ar ? content[3].AName : content[3].EName}</th>
-        <th>${language.ar ? content[4].AName : content[4].EName}</th>
-        <th>${language.ar ? content[5].AName : content[5].EName}</th>
+        <th style="max-width: 20%;width: 15%;">${lang == language.ar ? content[1].AName : content[1].EName}</th>
+        <th>${lang == language.ar ? content[2].AName : content[2].EName}</th>
+        <th>${lang == language.ar ? content[3].AName : content[3].EName}</th>
+        <th>${lang == language.ar ? content[4].AName : content[4].EName}</th>
+        <th>${lang == language.ar ? content[5].AName : content[5].EName}</th>
         </tr>
 
     </thead>
@@ -561,8 +561,8 @@ function createOrderTable() {
         </tr>
         <tr>
         <td colspan="5" class="totalPrice">
-            <span>${language.ar ? content[6].AName : content[6].EName} : </span>
-            <span id="totalPriceVal">0</span> <span id="totalPriceVal">${language.ar ? content[7].AName : content[7].EName}</span>
+            <span>${lang == language.ar ? content[6].AName : content[6].EName} : </span>
+            <span id="totalPriceVal">0</span> <span id="totalPriceVal">${lang == language.ar ? content[7].AName : content[7].EName}</span>
         </td>
         </tr>
     </tfoot>
@@ -578,8 +578,8 @@ function createSettingsPart() {
     float.innerHTML = ``;
     float.innerHTML = `
     <div class="pages">
-        <button class="pagesBtn active" id="namePage">${language.ar ? content[16].AName : content[16].EName}</button>
-        <button class="pagesBtn" id="typePage">${language.ar ? content[17].AName : content[17].EName}</button>
+        <button class="pagesBtn active" id="namePage">${lang == language.ar ? content[16].AName : content[16].EName}</button>
+        <button class="pagesBtn" id="typePage">${lang == language.ar ? content[17].AName : content[17].EName}</button>
         <button id="closeFloat">
             <svg
                 class="close"
@@ -606,7 +606,7 @@ function createSettingsPart() {
                 onclick="addSettingRow('N')"
                 type="button"
                 >
-                ${language.ar ? content[14].AName : content[14].EName}
+                ${lang == language.ar ? content[14].AName : content[14].EName}
                 </button>
                 <button
                 class="sumbitNames"
@@ -614,16 +614,16 @@ function createSettingsPart() {
                 onclick=" submitSettings('N')"
                 type="button"
                 >
-                ${language.ar ? content[15].AName : content[15].EName}
+                ${lang == language.ar ? content[15].AName : content[15].EName}
                 </button>
             </div>
             <table>
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th>${language.ar ? content[10].AName : content[10].EName}</th>
-                    <th>${language.ar ? content[11].AName : content[11].EName}</th>
-                    <th>${language.ar ? content[4].AName : content[4].EName}</th>
+                    <th>${lang == language.ar ? content[10].AName : content[10].EName}</th>
+                    <th>${lang == language.ar ? content[11].AName : content[11].EName}</th>
+                    <th>${lang == language.ar ? content[4].AName : content[4].EName}</th>
                 </tr>
                 </thead>
                 <tbody id="nameRows"></tbody>
@@ -632,7 +632,7 @@ function createSettingsPart() {
         <div class="types">
             <div class="addOrderwarpper">
                 <button class="addOrder" id="addType" onclick="addSettingRow('T')" type="button">
-                ${language.ar ? content[13].AName : content[13].EName}
+                ${lang == language.ar ? content[13].AName : content[13].EName}
                 </button>
                 <button
                 class="sumbitNames"
@@ -640,17 +640,17 @@ function createSettingsPart() {
                 onclick="submitSettings('T')"
                 type="button"
                 >
-                ${language.ar ? content[15].AName : content[15].EName}
+                ${lang == language.ar ? content[15].AName : content[15].EName}
                 </button>
             </div>
             <table>
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th>${language.ar ? content[10].AName : content[10].EName}</th>
-                    <th>${language.ar ? content[11].AName : content[11].EName}</th>
-                    <th>${language.ar ? content[12].AName : content[12].EName}</th>
-                    <th>${language.ar ? content[4].AName : content[4].EName}</th>
+                    <th>${lang == language.ar ? content[10].AName : content[10].EName}</th>
+                    <th>${lang == language.ar ? content[11].AName : content[11].EName}</th>
+                    <th>${lang == language.ar ? content[12].AName : content[12].EName}</th>
+                    <th>${lang == language.ar ? content[4].AName : content[4].EName}</th>
                 </tr>
                 </thead>
                 <tbody id="typeRows"></tbody>
@@ -711,17 +711,17 @@ function changeLang() {
         typeSelector.value = val;
     });
 
-    (orders.querySelector('#addOrder') as HTMLButtonElement).innerHTML = language.ar ? content[0].AName : content[0].EName;
-    (orders.querySelector('#changeLang') as HTMLButtonElement).innerHTML = language.ar ? content[8].AName : content[8].EName;
+    (orders.querySelector('#addOrder') as HTMLButtonElement).innerHTML = lang == language.ar ? content[0].AName : content[0].EName;
+    (orders.querySelector('#changeLang') as HTMLButtonElement).innerHTML = lang == language.ar ? content[8].AName : content[8].EName;
     orders.querySelectorAll('th').forEach((element, index) => {
-        element.innerHTML = language.ar ? content[index + 1].AName : content[index + 1].EName;
+        element.innerHTML = lang == language.ar ? content[index + 1].AName : content[index + 1].EName;
     });
     orders.querySelectorAll('.totalclient').forEach((element) => {
-        (element.querySelector('input + span') as HTMLElement).innerHTML = language.ar ? content[9].AName : content[9].EName; + ' : ';
-        (element.lastElementChild as HTMLElement).innerHTML = language.ar ? content[7].AName : content[7].EName;
+        (element.querySelector('input + span') as HTMLElement).innerHTML = lang == language.ar ? content[9].AName : content[9].EName; + ' : ';
+        (element.lastElementChild as HTMLElement).innerHTML = lang == language.ar ? content[7].AName : content[7].EName;
     });
-    ((orders.querySelector('.totalPrice') as HTMLElement).firstElementChild as HTMLElement).innerHTML = language.ar ? content[6].AName : content[6].EName; + ' : ';
-    ((orders.querySelector('.totalPrice') as HTMLElement).lastElementChild as HTMLElement).innerHTML = language.ar ? content[7].AName : content[7].EName;
+    ((orders.querySelector('.totalPrice') as HTMLElement).firstElementChild as HTMLElement).innerHTML = lang == language.ar ? content[6].AName : content[6].EName; + ' : ';
+    ((orders.querySelector('.totalPrice') as HTMLElement).lastElementChild as HTMLElement).innerHTML = lang == language.ar ? content[7].AName : content[7].EName;
 
     CalculateTotals();
 }
@@ -827,35 +827,92 @@ window.onunload = () =>{
     JSON.parse(window.localStorage.getItem('appData') as string);
 }
 
+async function SqlWorker(buf:any, sqlSentance:string , dataFor : dataFor) {
+	const worker = new Worker("/dist/dist/worker.sql-wasm.js");
+	console.log(Worker.toString());
+	worker.onmessage = () => {
+		console.log('Worker Message');
+		worker.onmessage = 
+		event => {
+			//const { dataFor } = event.data;
+			const { values } = event.data.results[0];
 
-window.onload = function WindowLoad(event) {
-    let myData = JSON.parse(window.localStorage.getItem('appData') as string);
-    if (myData != null) {
-        content = myData.content;
-        clients = myData.clients;
-        totalOrder = myData.totalOrder;
-        cheque = myData.cheque;
-        types = myData.types;
-        orders = myData.orders;
-        totalOrderItems =  myData.totalOrderItems;
-        lang =  myData.lang;
-        createOrderTable();
-        createSettingsPart()
-        displayStored();
-    }else{
-        createOrderTable();
-        createSettingsPart()
-        addOrderRow();
-    }
+			switch (dataFor) {
+				case 1:
+					clients = values.length > 0
+							? values.map((row: any) => ({
+										Id: parseInt(row[0]),
+										EName: row[1].toString(),
+										AName: row[2].toString(),
+								})) as INames[]
+							: clients;
+					break;
+				case 2:
+					types = values.length > 0
+							? values.map((row: any) => ({
+										Id: parseInt(row[0]),
+										EName: row[1].toString(),
+										AName: row[2].toString(),
+										Price: parseFloat(row[3]),
+								})) as IItems[]
+							: types;
+					break;
+				case 3:
+						content = values.length > 0
+								? values.map((row: any) => ({
+											Id: parseInt(row[0]),
+											EName: row[1].toString(),
+											AName: row[2].toString(),
+									})) as INames[]
+								: content;
+						break;
+				default:
+					break;
+			}
+			console.log(dataFor.toString() + event.data); // The result of the query
+		};
 
-    var float = document.querySelector('.float') as HTMLElement;;
+		worker.postMessage({
+			id: 2,
+			action: "exec",
+			sql: sqlSentance,//"SELECT * FROM Clients"
+			
+		});
+	};
 
-    const opener = document.getElementById('openFloat') as HTMLElement;
-    opener.addEventListener('click', () => {
-        float.style.display = 'grid';
-        displayNameRows(clients);
-        displayTypeRows(types);
-    });
-    
-    
+	worker.onerror = e => console.log("Worker error: ", e);
+		worker.postMessage({
+			id:1,
+			action:"open",
+			buffer:buf, /*Optional. An ArrayBuffer representing an SQLite Database file*/
+		});
+		
+}
+
+window.onload = async function WindowLoad(event) {
+
+	const sqlPromise = initSqlJs({
+			locateFile: file => `/dist/dist/${file}`
+	});
+
+	const dataPromise = fetch("/orders.db").then(res => res.arrayBuffer());
+
+	const [SQL, buf] = await Promise.all([sqlPromise, dataPromise]);
+	const dbConnection  = new SQL.Database(new Uint8Array(buf));
+
+	await SqlWorker(buf, "SELECT code, EnName, ArName FROM Content", dataFor.content);
+	await SqlWorker(buf, "SELECT * FROM Clients", dataFor.client);
+	await SqlWorker(buf, "SELECT * FROM Items", dataFor.item);
+
+	createOrderTable();
+	createSettingsPart()
+
+	var float = document.querySelector('.float') as HTMLElement;;
+
+	const opener = document.getElementById('openFloat') as HTMLElement;
+	opener.addEventListener('click', () => {
+			float.style.display = 'grid';
+			displayNameRows(clients);
+			displayTypeRows(types);
+	});
 }
