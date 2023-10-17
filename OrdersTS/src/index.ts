@@ -886,6 +886,7 @@ async function SqlWorker(buf:any, sqlSentance:string , dataFor : dataFor) {
 			action:"open",
 			buffer:buf, /*Optional. An ArrayBuffer representing an SQLite Database file*/
 		});
+		
 }
 
 window.onload = async function WindowLoad(event) {

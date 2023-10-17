@@ -15,6 +15,7 @@ conn.execute("""CREATE TABLE IF NOT EXISTS Clients (id integer primary key, EnNa
 conn.execute("""CREATE TABLE IF NOT EXISTS Content (id integer primary key, code int, EnName text, ArName text)""")
 conn.execute("""CREATE TABLE IF NOT EXISTS Items (id integer primary key, EnName text, ArName text, Price real)""")
 
+
 # Data text 
 class Names :
     def __init__(self, EnName, ArName) -> None:
