@@ -1,4 +1,5 @@
 export interface INames{
+    Id : number,
     EName : string,
     AName : string,
 }
